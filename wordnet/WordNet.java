@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  */
 public class WordNet {
        private Digraph G;
-       private HashMap<Integer, Iterable<String>> Synsets;
+       private final HashMap<Integer, Iterable<String>> Synsets;
        public WordNet(String synsets, String hypernyms) {
            Synsets = new HashMap<>();
            G = new Digraph(82192);
@@ -48,11 +48,9 @@ public class WordNet {
            return l;
        }
        public static void main(String[] args) {
-        // TODO code application logic here
         WordNet wn = new WordNet("synsets.txt", "hypernyms.txt");
         //164,21012,56099 
         // // means that the the synset 164 ("Actifed") has two hypernyms: 21012 ("antihistamine") and 56099 ("nasal_decongestant")
-        // The hypernyms of Actifed are '', ''
         StringJoiner hyps = new StringJoiner(", ");
         Iterable<Integer> hyps1 = wn.G.adj(164);
         for(Integer i : hyps1) { 
