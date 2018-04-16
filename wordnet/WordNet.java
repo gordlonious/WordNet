@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  */
 public class WordNet {
        private Digraph G;
-       private final HashMap<Integer, Iterable<String>> Synsets;
+       private final HashMap<Integer, Collection<String>> Synsets;
        public WordNet(String synsets, String hypernyms) {
            Synsets = new HashMap<>();
            G = new Digraph(82192);
@@ -37,17 +37,20 @@ public class WordNet {
        }
        
        public Iterable<String> nouns() {
-           List<String> l = new ArrayList<>();
-           Collection<Iterable<String>> vals = Synsets.values();
-           for(Iterable<String> syn : vals) {
-               for(String s : syn) {
-                   l.add(s);
-               }
-           }
-           // return Synsets.values().stream().flatMap(syn -> syn.stream()).collect(Collectors.toList());
-           return l;
+           return Synsets.values().stream().flatMap(syn -> syn.stream()).collect(Collectors.toList());
        }
-       public static void main(String[] args) {
+       
+       public boolean isNoun(String n)
+       {
+           return Synsets.values().stream().anyMatch(synset -> synset.stream().anyMatch(s -> s.equals(n)));
+       }
+       
+//       public int distance(String nounA, String nounB) {
+//           
+//       }
+
+           
+    public static void main(String[] args) {
         WordNet wn = new WordNet("synsets.txt", "hypernyms.txt");
         //164,21012,56099 
         // // means that the the synset 164 ("Actifed") has two hypernyms: 21012 ("antihistamine") and 56099 ("nasal_decongestant")
@@ -59,6 +62,25 @@ public class WordNet {
             }
       }
         System.out.printf("The hypernyms of the word 'Actifed' are: %s%n", hyps);
+        
+        // test isNoun with 'Actifed' example
+        System.out.printf("Actifed isNoun should be true, acutal is %b%n", wn.isNoun("Actifed"));
+        // test that an obviously wrong noun is !isNoun
+        System.out.printf("xxybviaZ123 isNoun should be false, actual is %b%n", wn.isNoun("xxybviaZ123"));
+        
+        // test nouns() by printing the first ten in the collection
+        Iterable<String> nouns1 = wn.nouns();
+        int n1Count = 0;
+        for(String s : nouns1) {
+            if(n1Count <= 9) { 
+                System.out.printf("%s, ", s);
+                n1Count++;
+            }
+            else  {
+                System.out.println();
+                break;
+            }
+        }
     }
     
 }
