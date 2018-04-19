@@ -1,13 +1,13 @@
 package wordnet;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Digraph;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
+//import java.util.stream.Collectors;
+import edu.princeton.cs.algs4.BreadthFirstDirectedPaths;
 /**
  *
  * @author gordl
@@ -15,8 +15,10 @@ import java.util.stream.Collectors;
 public class WordNet {
        private Digraph G;
        private final HashMap<Integer, Collection<String>> Synsets;
+       private final HashMap<String, Integer> Nouns;
        public WordNet(String synsets, String hypernyms) {
            Synsets = new HashMap<>();
+           Nouns = new HashMap<>();
            G = new Digraph(82192);
            In in = new In(synsets);
            while(in.hasNextLine()) {
@@ -24,7 +26,10 @@ public class WordNet {
                String[] synitems = synline.split(",");
                int id = Integer.parseInt(synitems[0]);
                String[] synset = synitems[1].split(" ");
-               Synsets.put(id, Arrays.asList(synset));
+               Synsets.put(id, Arrays.asList(synset)); // make ST with synset id as key and collection of nouns as value
+               for(String syn : synset) {
+                   Nouns.put(syn, id); // make ST with noun as key and synset id as value
+               }
            }
            in = new In(hypernyms);
            while(in.hasNextLine()) {
@@ -37,17 +42,28 @@ public class WordNet {
        }
        
        public Iterable<String> nouns() {
-           return Synsets.values().stream().flatMap(syn -> syn.stream()).collect(Collectors.toList());
+           // this works by using the Synsets symbol table
+           //return Synsets.values().stream().flatMap(syn -> syn.stream()).collect(Collectors.toList());
+           
+           return Nouns.keySet();
        }
        
        public boolean isNoun(String n)
        {
-           return Synsets.values().stream().anyMatch(synset -> synset.stream().anyMatch(s -> s.equals(n)));
+           // this works by using the Synsets symbol table
+           //return Synsets.values().stream().anyMatch(synset -> synset.stream().anyMatch(s -> s.equals(n)));
+           
+           return Nouns.get(n) != null;
        }
        
-//       public int distance(String nounA, String nounB) {
-//           
-//       }
+       public int distance(String nounA, String nounB) {
+           Integer[] a = new Integer[] { Nouns.get(nounA), Nouns.get(nounB) };
+           List<Integer> l = Arrays.asList(a);
+           BreadthFirstDirectedPaths p = new BreadthFirstDirectedPaths(G, l);
+           //p.pathTo(0)
+           
+           return -1;
+       }
 
            
     public static void main(String[] args) {
