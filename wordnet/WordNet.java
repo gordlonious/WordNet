@@ -7,19 +7,20 @@ import java.util.Collection;
 import java.util.List;
 import java.util.StringJoiner;
 //import java.util.stream.Collectors;
-import edu.princeton.cs.algs4.BreadthFirstDirectedPaths;
 /**
  *
  * @author gordl
  */
 public class WordNet {
        private Digraph G;
+       private final SAP sap;
        private final HashMap<Integer, Collection<String>> Synsets;
        private final HashMap<String, Integer> Nouns;
        public WordNet(String synsets, String hypernyms) {
            Synsets = new HashMap<>();
            Nouns = new HashMap<>();
            G = new Digraph(82192);
+           sap = new SAP(G);
            In in = new In(synsets);
            while(in.hasNextLine()) {
                String synline = in.readLine();
@@ -57,12 +58,17 @@ public class WordNet {
        }
        
        public int distance(String nounA, String nounB) {
-           Integer[] a = new Integer[] { Nouns.get(nounA), Nouns.get(nounB) };
-           List<Integer> l = Arrays.asList(a);
-           BreadthFirstDirectedPaths p = new BreadthFirstDirectedPaths(G, l);
-           //p.pathTo(0)
-           
-           return -1;
+           return sap.length(Nouns.get(nounA), Nouns.get(nounB));
+       }
+       
+       public String sap(String nounA, String nounB) {
+           //return sap.ancestor()
+           int ancestor = sap.ancestor(Nouns.get(nounA), Nouns.get(nounB));
+           StringJoiner sj = new StringJoiner("', ", "{'", "'}");
+           for(String s : Synsets.get(ancestor)) {
+               sj.add(s);
+           }
+           return sj.toString();
        }
 
            
@@ -97,6 +103,10 @@ public class WordNet {
                 break;
             }
         }
+        System.out.printf("The sap distance between 'Actifed' and 'antihistamine' is %d%n", wn.distance("Actifed", "antihistamine"));
+        System.out.printf("The sap distance between 'kick' and 'action' is %d%n", wn.distance("kick", "action"));
+        System.out.printf("This shortest common ancestor of 'happiness' and 'stoicism' is %s%n", wn.sap("disease", "sickness"));
+        System.out.printf("This shortest common ancestor of 'disease' and 'sickness' is %s%n", wn.sap("disease", "sickness"));
     }
     
 }
