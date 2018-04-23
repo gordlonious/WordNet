@@ -7,19 +7,20 @@ import java.util.Collection;
 import java.util.List;
 import java.util.StringJoiner;
 //import java.util.stream.Collectors;
-import edu.princeton.cs.algs4.BreadthFirstDirectedPaths;
 /**
  *
  * @author gordl
  */
 public class WordNet {
        private Digraph G;
+       private final SAP sap;
        private final HashMap<Integer, Collection<String>> Synsets;
        private final HashMap<String, Integer> Nouns;
        public WordNet(String synsets, String hypernyms) {
+           if(synsets == null || hypernyms == null) throw new NullPointerException();
            Synsets = new HashMap<>();
            Nouns = new HashMap<>();
-           G = new Digraph(82192);
+           G = new Digraph(82192);  // do we need to support various numbers of vertices?
            In in = new In(synsets);
            while(in.hasNextLine()) {
                String synline = in.readLine();
@@ -38,6 +39,9 @@ public class WordNet {
                int v = Integer.parseInt(hyplist.get(0));
                hyplist.stream().skip(1).forEach(s -> G.addEdge(v, Integer.parseInt(s)));
            }
+           Collection<String> syntest = Synsets.get(38003);
+           sap = new SAP(G);
+           if(!sap.isRootedDAG()) throw new IllegalArgumentException("WordNet was unable to create a Rooted Directed Acyclic Graph from argument");
            System.out.println("Done reading synsets and hypernyms");
        }
        
@@ -53,16 +57,25 @@ public class WordNet {
            // this works by using the Synsets symbol table
            //return Synsets.values().stream().anyMatch(synset -> synset.stream().anyMatch(s -> s.equals(n)));
            
+           if(n == null) throw new NullPointerException("calls isNoun with null argument");
            return Nouns.get(n) != null;
        }
        
        public int distance(String nounA, String nounB) {
-           Integer[] a = new Integer[] { Nouns.get(nounA), Nouns.get(nounB) };
-           List<Integer> l = Arrays.asList(a);
-           BreadthFirstDirectedPaths p = new BreadthFirstDirectedPaths(G, l);
-           //p.pathTo(0)
-           
-           return -1;
+           if(nounA == null || nounB == null) throw new NullPointerException("calls distance with null argument");
+           if(Nouns.get(nounA) == null || Nouns.get(nounB) == null) throw new IllegalArgumentException("calls distance with non-WordNet noun(s) as argument");
+           return sap.length(Nouns.get(nounA), Nouns.get(nounB));
+       }
+       
+       public String sap(String nounA, String nounB) {
+           if(nounA == null || nounB == null) throw new NullPointerException("calls sap with null argument");
+           if(Nouns.get(nounA) == null || Nouns.get(nounB) == null) throw new IllegalArgumentException("calls distance with non-WordNet noun(s) as argument");
+           int ancestor = sap.ancestor(Nouns.get(nounA), Nouns.get(nounB));
+           StringJoiner sj = new StringJoiner("', ", "{'", "'}");
+           for(String s : Synsets.get(ancestor)) {
+               sj.add(s);
+           }
+           return sj.toString();
        }
 
            
@@ -97,6 +110,10 @@ public class WordNet {
                 break;
             }
         }
+        System.out.printf("The sap distance between 'Actifed' and 'antihistamine' is %d%n", wn.distance("Actifed", "antihistamine"));
+        System.out.printf("The sap distance between 'kick' and 'action' is %d%n", wn.distance("kick", "action"));
+        System.out.printf("This shortest common ancestor of 'happiness' and 'stoicism' is %s%n", wn.sap("disease", "sickness"));
+        System.out.printf("This shortest common ancestor of 'disease' and 'sickness' is %s%n", wn.sap("disease", "sickness"));
     }
     
 }
