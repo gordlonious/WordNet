@@ -28,7 +28,7 @@ public class SAP {
     }
     public boolean isRootedDAG() {
         boolean rootReachesAllOtherNodesWithReverseEdges = true;
-        DirectedDFS dfs = new DirectedDFS(this.G.reverse(), 0/* is 0 really the root */);
+        DirectedDFS dfs = new DirectedDFS(this.G.reverse(), 38003);
         for(int v = 0; v < this.G.V(); v++) {
             if(!dfs.marked(v)) {
                 rootReachesAllOtherNodesWithReverseEdges = false;
@@ -38,6 +38,7 @@ public class SAP {
         return isDAG() && rootReachesAllOtherNodesWithReverseEdges;
     }
     public int length(int v, int w) {
+        if(v < 0 || v > (G.V() - 1) || w < 0 || w > (G.V() - 1)) throw new IndexOutOfBoundsException("Invalid vertices passed to length");
         BreadthFirstDirectedPaths vbfs = new BreadthFirstDirectedPaths(G, v);
         BreadthFirstDirectedPaths wbfs = new BreadthFirstDirectedPaths(G, w);
         Collection<Integer> vc = new ArrayList<>();
@@ -62,6 +63,7 @@ public class SAP {
         }
     }
     public int ancestor(int v, int w) {
+        if(v < 0 || v > (G.V() - 1) || w < 0 || w > (G.V() - 1)) throw new IndexOutOfBoundsException("Invalid vertices passed to length");
         BreadthFirstDirectedPaths vbfs = new BreadthFirstDirectedPaths(G, v);
         BreadthFirstDirectedPaths wbfs = new BreadthFirstDirectedPaths(G, w);
         Collection<Integer> vc = new ArrayList<>();
