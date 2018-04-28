@@ -77,6 +77,17 @@ public class WordNet {
            }
            return sj.toString();
        }
+       
+       private void printtenparents(int v) {
+           int c = v;
+           for(int i = 0; i < 10; i++) {
+            int next;
+            try { next = this.G.adj(c).iterator().next(); }
+            catch(java.util.NoSuchElementException e) { break; }
+            System.out.printf("%s", this.Synsets.get(next));
+            c = next;
+           }
+       }
 
            
     public static void main(String[] args) {
@@ -112,9 +123,16 @@ public class WordNet {
         }
         System.out.printf("The sap distance between 'Actifed' and 'antihistamine' is %d%n", wn.distance("Actifed", "antihistamine"));
         System.out.printf("The sap distance between 'kick' and 'action' is %d%n", wn.distance("kick", "action"));
-        System.out.printf("This shortest common ancestor of 'happiness' and 'stoicism' is %s%n", wn.sap("disease", "sickness"));
+        System.out.printf("This shortest common ancestor of 'happiness' and 'stoicism' is %s%n", wn.sap("happiness", "stoicism"));
         System.out.printf("This shortest common ancestor of 'disease' and 'sickness' is %s%n", wn.sap("disease", "sickness"));
-        System.out.printf("sap of 'tea' and 'coffee' is %n%s", wn.sap("tea", "coffee"));
-    }
-    
+        System.out.printf("sap of 'tea' and 'coffee' is %s%s%n", wn.sap("tea", "coffee"), " <--- this looks like a bug");
+        System.out.printf("v for tea: %d, v for coffee %d: %n", wn.Nouns.get("tea"), wn.Nouns.get("coffee"));
+        System.out.printf("tea's parent chain looks like ");
+        wn.printtenparents(75521);
+        System.out.println();
+        System.out.printf("coffe's parent chain looks like ");
+        wn.printtenparents(30233);
+        System.out.println();
+
+  }
 }
