@@ -4,11 +4,9 @@ import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.DirectedCycle;
 import edu.princeton.cs.algs4.DirectedDFS;
 import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -62,8 +60,36 @@ public class SAP {
             return -1;
         }
     }
+    
+     public int length(Iterable<Integer> vs, Iterable<Integer> ws) {
+        for(int v : vs) if(v < 0 || v > (G.V() - 1)) throw new IndexOutOfBoundsException("Invalid vertices passed to length");
+        for(int w : ws) if(w < 0 || w > (G.V() - 1)) throw new IndexOutOfBoundsException("Invalid vertices passed to length");
+        BreadthFirstDirectedPaths vbfs = new BreadthFirstDirectedPaths(G, vs);
+        BreadthFirstDirectedPaths wbfs = new BreadthFirstDirectedPaths(G, ws);
+        Collection<Integer> vc = new ArrayList<>();
+        Collection<Integer> wc = new ArrayList<>();
+        IntStream.range(0, G.V()).filter(i -> vbfs.hasPathTo(i)).forEach(i -> vc.add(i));
+        IntStream.range(0, G.V()).filter(i -> wbfs.hasPathTo(i)).forEach(i -> wc.add(i));
+        Collection<Integer> candidateVertices = vc.stream().filter(vrt -> wc.contains(vrt)).collect(Collectors.toList());
+        int shortestV;
+        if(candidateVertices.size() > 1) {
+            shortestV = candidateVertices.iterator().next();
+            for(int i : candidateVertices) {
+                if(vbfs.distTo(i) + wbfs.distTo(i) < vbfs.distTo(shortestV) + wbfs.distTo(shortestV)) {
+                    shortestV = i;
+                }
+            }
+            return vbfs.distTo(shortestV) + wbfs.distTo(shortestV);
+        } else if(candidateVertices.size() == 1) {
+            shortestV = candidateVertices.iterator().next();
+            return vbfs.distTo(shortestV) + wbfs.distTo(shortestV);
+        } else {
+            return -1;
+        }
+    }
+     
     public int ancestor(int v, int w) {
-        if(v < 0 || v > (G.V() - 1) || w < 0 || w > (G.V() - 1)) throw new IndexOutOfBoundsException("Invalid vertices passed to length");
+        if(v < 0 || v > (G.V() - 1) || w < 0 || w > (G.V() - 1)) throw new IndexOutOfBoundsException("Invalid vertices passed to ancestor");
         BreadthFirstDirectedPaths vbfs = new BreadthFirstDirectedPaths(G, v);
         BreadthFirstDirectedPaths wbfs = new BreadthFirstDirectedPaths(G, w);
         Collection<Integer> vc = new ArrayList<>();
@@ -86,6 +112,33 @@ public class SAP {
             return -1;
         }
     }
+    
+     public int ancestor(Iterable<Integer> vs, Iterable<Integer> ws) {
+        for(int v : vs) if(v < 0 || v > (G.V() - 1)) throw new IndexOutOfBoundsException("Invalid vertices passed to ancestor");
+        for(int w : ws) if(w < 0 || w > (G.V() - 1)) throw new IndexOutOfBoundsException("Invalid vertices passed to ancestor");
+        BreadthFirstDirectedPaths vbfs = new BreadthFirstDirectedPaths(G, vs);
+        BreadthFirstDirectedPaths wbfs = new BreadthFirstDirectedPaths(G, ws);
+        Collection<Integer> vc = new ArrayList<>();
+        Collection<Integer> wc = new ArrayList<>();
+        IntStream.range(0, G.V()).filter(i -> vbfs.hasPathTo(i)).forEach(i -> vc.add(i));
+        IntStream.range(0, G.V()).filter(i -> wbfs.hasPathTo(i)).forEach(i -> wc.add(i));
+        Collection<Integer> candidateVertices = vc.stream().filter(vrt -> wc.contains(vrt)).collect(Collectors.toList());
+        int shortestV;
+        if(candidateVertices.size() > 1) {
+        shortestV = candidateVertices.iterator().next();
+            for(int i : candidateVertices) {
+                if(vbfs.distTo(i) + wbfs.distTo(i) < vbfs.distTo(shortestV) + wbfs.distTo(shortestV)) {
+                    shortestV = i;
+                }
+            }
+            return shortestV;
+        } else if(candidateVertices.size() == 1) {
+            return candidateVertices.iterator().next();
+        } else {
+            return -1;
+        }
+    }
+     
     public static void main(String[] args) {
         if(args.length > 0) { 
             In gin = new In(args[0]);
