@@ -71,7 +71,7 @@ public class WordNet {
            if(nounA == null || nounB == null) throw new NullPointerException("calls sap with null argument");
            if(Nouns.get(nounA) == null || Nouns.get(nounB) == null) throw new IllegalArgumentException("calls distance with non-WordNet noun(s) as argument");
            int ancestor = sap.ancestor(Nouns.get(nounA), Nouns.get(nounB));
-           StringJoiner sj = new StringJoiner("', ", "{'", "'}");
+           StringJoiner sj = new StringJoiner("', '", "{'", "'}");
            for(String s : Synsets.get(ancestor)) {
                sj.add(s);
            }
@@ -114,6 +114,7 @@ public class WordNet {
         System.out.printf("The sap distance between 'kick' and 'action' is %d%n", wn.distance("kick", "action"));
         System.out.printf("This shortest common ancestor of 'happiness' and 'stoicism' is %s%n", wn.sap("disease", "sickness"));
         System.out.printf("This shortest common ancestor of 'disease' and 'sickness' is %s%n", wn.sap("disease", "sickness"));
+        System.out.printf("sap of 'tea' and 'coffee' is %n%s", wn.sap("tea", "coffee"));
     }
     
 }

@@ -48,7 +48,7 @@ public class SAP {
         Collection<Integer> candidateVertices = vc.stream().filter(vrt -> wc.contains(vrt)).collect(Collectors.toList());
         int shortestV;
         if(candidateVertices.size() > 1) {
-        shortestV = candidateVertices.iterator().next();
+            shortestV = candidateVertices.iterator().next();
             for(int i : candidateVertices) {
                 if(vbfs.distTo(i) + wbfs.distTo(i) < vbfs.distTo(shortestV) + wbfs.distTo(shortestV)) {
                     shortestV = i;
