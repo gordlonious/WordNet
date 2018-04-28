@@ -62,8 +62,22 @@ public class SAP {
     }
     
      public int length(Iterable<Integer> vs, Iterable<Integer> ws) {
-        for(int v : vs) if(v < 0 || v > (G.V() - 1)) throw new IndexOutOfBoundsException("Invalid vertices passed to length");
-        for(int w : ws) if(w < 0 || w > (G.V() - 1)) throw new IndexOutOfBoundsException("Invalid vertices passed to length");
+        int vcount = 0;
+        for(int v : vs) {
+            if(v < 0 || v > (G.V() - 1)) {
+                throw new IndexOutOfBoundsException("Invalid vertices passed to length");
+            }
+            if(vcount >= G.V()) throw new IllegalArgumentException("We do not allow duplicate vertex values or collections greater than the number of vertices");
+            vcount++;
+        }
+        int wcount = 0;
+        for(int w : ws) {
+            if(w < 0 || w > (G.V() - 1)) { 
+                throw new IndexOutOfBoundsException("Invalid vertices passed to length");
+            }
+            if(vcount >= G.V()) throw new IllegalArgumentException("We do not allow duplicate vertex values or collections greater than the number of vertices");
+            wcount++;
+        }
         BreadthFirstDirectedPaths vbfs = new BreadthFirstDirectedPaths(G, vs);
         BreadthFirstDirectedPaths wbfs = new BreadthFirstDirectedPaths(G, ws);
         Collection<Integer> vc = new ArrayList<>();
@@ -114,8 +128,22 @@ public class SAP {
     }
     
      public int ancestor(Iterable<Integer> vs, Iterable<Integer> ws) {
-        for(int v : vs) if(v < 0 || v > (G.V() - 1)) throw new IndexOutOfBoundsException("Invalid vertices passed to ancestor");
-        for(int w : ws) if(w < 0 || w > (G.V() - 1)) throw new IndexOutOfBoundsException("Invalid vertices passed to ancestor");
+        int vcount = 0;
+        for(int v : vs) {
+            if(v < 0 || v > (G.V() - 1)) {
+                throw new IndexOutOfBoundsException("Invalid vertices passed to ancestor");
+            }
+            if(vcount >= G.V()) throw new IllegalArgumentException("We do not allow duplicate vertex values or collections greater than the number of vertices");
+            vcount++;
+        }
+        int wcount = 0;
+        for(int w : ws) {
+            if(w < 0 || w > (G.V() - 1)) { 
+                throw new IndexOutOfBoundsException("Invalid vertices passed to ancestor");
+            }
+            if(vcount >= G.V()) throw new IllegalArgumentException("We do not allow duplicate vertex values or collections greater than the number of vertices");
+            wcount++;
+        }
         BreadthFirstDirectedPaths vbfs = new BreadthFirstDirectedPaths(G, vs);
         BreadthFirstDirectedPaths wbfs = new BreadthFirstDirectedPaths(G, ws);
         Collection<Integer> vc = new ArrayList<>();

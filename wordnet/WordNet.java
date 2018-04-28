@@ -130,7 +130,7 @@ public class WordNet {
         System.out.printf("tea's parent chain looks like ");
         wn.printtenparents(75521);
         System.out.println();
-        System.out.printf("coffe's parent chain looks like ");
+        System.out.printf("coffee's parent chain looks like ");
         wn.printtenparents(30233);
         System.out.println();
 
