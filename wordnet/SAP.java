@@ -167,6 +167,11 @@ public class SAP {
         }
     }
      
+    // SAMPLE COMMAND LINE ARGS
+    // // java wordnet/SAP digraph1.txt 3 11
+    // // java wordnet/SAP digraph1.txt 9 12
+    // // java wordnet/SAP digraph1.txt 7 2
+    // // java wordnet/SAP digraph1.txt 1 6
     public static void main(String[] args) {
         if(args.length > 0) { 
             In gin = new In(args[0]);
@@ -178,24 +183,27 @@ public class SAP {
             int ancestor = sap.ancestor(v, w);
             StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
         } else {
-            In gin = new In("digraph1ForTesting.txt");
-            boolean streamExists = gin.exists();
-            Digraph G = new Digraph(gin);
-            SAP sap = new SAP(G);
-            In in = new In("digraph1ForTesting.txt");
-            while(in.hasNextLine()) {
-                String line = in.readLine();
-                String[] a = line.split(" ");
-                if (a.length == 1) {
-                    System.out.println("ignoring line");
-                } else {
-                    int v = Integer.parseInt(a[0]);
-                    int w = Integer.parseInt(a[1]);
-                    int length = sap.length(v, w);
-                    int ancestor = sap.ancestor(v, w);
-                    StdOut.printf("for veritces %d and %d: length = %d, ancestor = %d\n", v, w, length, ancestor);
-                }  
-            }
-        }   
+//            In gin = new In("digraph1ForTesting.txt");
+//            boolean streamExists = gin.exists();
+//            Digraph G = new Digraph(gin);
+//            SAP sap = new SAP(G);
+//            In in = new In("digraph1ForTesting.txt");
+//            while(in.hasNextLine()) {
+//                String line = in.readLine();
+//                String[] a = line.split(" ");
+//                if (a.length == 1) {
+//                    System.out.println("ignoring line");
+//                } else {
+//                    int v = Integer.parseInt(a[0]);
+//                    int w = Integer.parseInt(a[1]);
+//                    int length = sap.length(v, w);
+//                    int ancestor = sap.ancestor(v, w);
+//                    StdOut.printf("for veritces %d and %d: length = %d, ancestor = %d\n", v, w, length, ancestor);
+//                }  
+//            }
+            System.out.println("PLEASE RUN ME WITH PROPER COMMAND LINE ARGUMENTS LIKE INSTRUCTIONS EXAMPLE %n "
+                    + "(I started out with my own test file to make sure things were working..");
+                    
+        }
     }
 }

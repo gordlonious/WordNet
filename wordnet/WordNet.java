@@ -126,13 +126,15 @@ public class WordNet {
         System.out.printf("This shortest common ancestor of 'happiness' and 'stoicism' is %s%n", wn.sap("happiness", "stoicism"));
         System.out.printf("This shortest common ancestor of 'disease' and 'sickness' is %s%n", wn.sap("disease", "sickness"));
         System.out.printf("sap of 'tea' and 'coffee' is %s%s%n", wn.sap("tea", "coffee"), " <--- this looks like a bug");
-        System.out.printf("v for tea: %d, v for coffee %d: %n", wn.Nouns.get("tea"), wn.Nouns.get("coffee"));
-        System.out.printf("tea's parent chain looks like ");
+        System.out.printf("tea's parent chain looks like: ");
         wn.printtenparents(75521);
         System.out.println();
-        System.out.printf("coffee's parent chain looks like ");
+        System.out.printf("coffee's parent chain looks like: ");
         wn.printtenparents(30233);
         System.out.println();
+        System.out.printf("bed's parent chain looks like: ");
+        wn.printtenparents(68642);
+        System.out.println(" <----- Looks like bed's Path to Entity Root is shorter than both tea's and coffee's, maybe there's no bug?");
 
   }
 }
