@@ -201,8 +201,8 @@ public class SAP {
 //                    StdOut.printf("for veritces %d and %d: length = %d, ancestor = %d\n", v, w, length, ancestor);
 //                }  
 //            }
-            System.out.println("PLEASE RUN ME WITH PROPER COMMAND LINE ARGUMENTS LIKE INSTRUCTIONS EXAMPLE %n "
-                    + "(I started out with my own test file to make sure things were working..");
+            System.out.printf("PLEASE RUN ME WITH PROPER COMMAND LINE ARGUMENTS LIKE INSTRUCTIONS EXAMPLE %n "
+                    + "(I started out with my own test file to make sure things were working..)%n");
                     
         }
     }
